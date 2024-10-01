@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 488167716976707819}
   - component: {fileID: 3954573152497840874}
-  - component: {fileID: 5517962657221465636}
   - component: {fileID: 2191246231955101331}
+  - component: {fileID: 696760812581999299}
   m_Layer: 0
   m_Name: Arrow
   m_TagString: Untagged
@@ -86,24 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5517962657221465636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5244420452269822704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cca5f4c83043b34c8e3be91a3204e46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canBePressed: 0
-  keyToPress: 97
-  hitEffect: {fileID: 4909923180412921987, guid: 028853a114dd00e4ca77214b8f060d94, type: 3}
-  goodEffect: {fileID: 2159234208326483622, guid: a5026e65a3f9b7243a0637830818492e, type: 3}
-  perfectEffect: {fileID: 1744947047312311421, guid: 79aeb59393f2a3d4b9be593706e01b52, type: 3}
-  missEffect: {fileID: 4217081764080415622, guid: 730910ced0fa3b14f8deb96a19bd5e7c, type: 3}
 --- !u!58 &2191246231955101331
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -139,3 +121,25 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.19
+--- !u!114 &696760812581999299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5244420452269822704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cca5f4c83043b34c8e3be91a3204e46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canBePressed: 0
+  hasStarted: 0
+  keyToPress: 0
+  hitEffect: {fileID: 0}
+  goodEffect: {fileID: 0}
+  perfectEffect: {fileID: 0}
+  missEffect: {fileID: 0}
+  player: 0
+  damage: 0
+  speed: 0

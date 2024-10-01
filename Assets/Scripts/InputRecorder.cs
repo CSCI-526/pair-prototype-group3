@@ -4,41 +4,58 @@ using UnityEngine;
 
 public class InputRecorder : MonoBehaviour
 {
-    private string inputSequence = "";
-    private float lastInputTime;
-    public float inputTimeThreshold = 3f; // Set the input time threshold in seconds
-    public KeyCode keyToPress1, keyToPress2;
+    public GameObject bulletPrefab;
+    public Transform upperTowerSpawnPoint;
+    public Transform lowerTowerSpawnPoint;
 
+    public Transform upperTowerSpawnPoint2;
+    public Transform lowerTowerSpawnPoint2;
+
+    public float fireRate;
+    private float upperFireCooldown;
+    private float lowerFireCooldown;
+
+
+    void Start()
+    {
+        fireRate = 0.3f;
+        upperFireCooldown = 0f;
+        lowerFireCooldown = 0f;
+    }
     void Update()
     {
-        if (Input.GetKeyDown(keyToPress1))
+
+        upperFireCooldown -= Time.deltaTime;
+        lowerFireCooldown -= Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.A) && upperFireCooldown <= 0f)
         {
-            RecordInput("U");
-        }
-        
-        if (Input.GetKeyDown(keyToPress2))
-        {
-            RecordInput("D");
+            FireBullet(upperTowerSpawnPoint);
+            upperFireCooldown = fireRate; 
         }
 
-        // If no input for longer than the threshold, print and reset the sequence
-        if (Time.time - lastInputTime > inputTimeThreshold && inputSequence.Length > 0)
+        if (Input.GetKeyDown(KeyCode.D) && lowerFireCooldown <= 0f)
         {
-            Debug.Log("Input sequence: " + inputSequence);
-            inputSequence = "";
+            FireBullet(lowerTowerSpawnPoint);
+            lowerFireCooldown = fireRate; 
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && upperFireCooldown <= 0f)
+        {
+            FireBullet(upperTowerSpawnPoint2);
+            upperFireCooldown = fireRate; 
+        }
+
+        if (Input.GetKeyDown(KeyCode.RightArrow) && lowerFireCooldown <= 0f)
+        {
+            FireBullet(lowerTowerSpawnPoint2);
+            lowerFireCooldown = fireRate; 
         }
     }
-
-    void RecordInput(string input)
+    void FireBullet(Transform spawnPoint)
     {
-        inputSequence += input;
-        lastInputTime = Time.time;
-        Debug.Log("Current input sequence: " + inputSequence);
+        GameObject bullet = Instantiate(bulletPrefab, spawnPoint.position, spawnPoint.rotation);
+        Debug.Log("shooting bullets from" + spawnPoint.name );
     }
-
-    // Method to access the input sequence from other scripts
-    public string GetInputSequence()
-    {
-        return inputSequence;
-    }
+    
 }

@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static TowerObject;
+
+
 
 public class NoteObject : MonoBehaviour
 {
@@ -9,56 +12,105 @@ public class NoteObject : MonoBehaviour
     public bool hasStarted;
     public KeyCode keyToPress;
     public GameObject hitEffect, goodEffect, perfectEffect, missEffect;
-    public float beatTempo;
     public int player;
+    public float damage; 
+    public float speed;
+    public float normalRate, goodRate;
+    private TowerObject tower;
 
     // Start is called before the first frame update
     void Start()
     {
-        beatTempo /= 60f;
+        speed =2;
+        damage = 5;
+        normalRate = 0.5f;
+        goodRate = 0.25f;
+        tower = null; 
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // detect whether the game has started
+
         if (Input.anyKeyDown)
-            {
-                hasStarted = true;
-            }
-        // Decide where the notes go
+        {
+            hasStarted = true;
+        }
         if (hasStarted && player == 1)
         {
-            transform.position -= new Vector3(beatTempo * Time.deltaTime, 0f, 0f);
-        } else if (hasStarted && player == 2)
+            transform.Translate(Vector3.right * speed * Time.deltaTime);
+        }
+        else if (hasStarted && player == 2)
         {
-            transform.position += new Vector3(beatTempo * Time.deltaTime, 0f, 0f);
+            transform.Translate(-Vector3.right * speed * Time.deltaTime);
         }
         
         if (Input.GetKeyDown(keyToPress))
         {
             if (canBePressed)
             {
+                Debug.Log("Can hit in key");
                 gameObject.SetActive(false);
 
                 //GameManager.instance.NoteHit();
                 //Mathf.Abs(transform.position.x + 8.01f) denotes the distance between the note and square.
-                if (Mathf.Abs(transform.position.x + 8.01f) > 0.25f)
+                if (player == 2)
                 {
-                    Debug.Log("Hit");
-                    GameManager.instance.NormalHit();
-                    Instantiate(hitEffect, transform.position, hitEffect.transform.rotation);
-                } else if (Mathf.Abs(transform.position.x + 8.01f) > 0.05f)
+                    if (Mathf.Abs(transform.position.x + 8.01f) > 0.25f)
+                    {
+                        Debug.Log("Hit");
+                        if (tower != null)
+                        {
+                            tower.TakeDamage(damage * normalRate);
+                        }
+        
+                        GameManager.instance.NormalHit();
+                        Instantiate(hitEffect, transform.position, hitEffect.transform.rotation);
+                    } else if (Mathf.Abs(transform.position.x + 8.01f) > 0.05f)
+                    {
+                        Debug.Log("Good");
+                        if (tower != null)
+                        {
+                            tower.TakeDamage(damage * goodRate);
+                        }
+
+                        GameManager.instance.GoodHit();
+                        Instantiate(goodEffect, transform.position, goodEffect.transform.rotation);
+                    } else
+                    {
+                        Debug.Log("Perferct");
+                        GameManager.instance.PerfectHit();
+                        Instantiate(perfectEffect, transform.position, perfectEffect.transform.rotation);
+                    }
+                }else
                 {
-                    Debug.Log("Good");
-                    GameManager.instance.GoodHit();
-                    Instantiate(goodEffect, transform.position, goodEffect.transform.rotation);
-                } else
-                {
-                    Debug.Log("Perferct");
-                    GameManager.instance.PerfectHit();
-                    Instantiate(perfectEffect, transform.position, perfectEffect.transform.rotation);
+                    if (Mathf.Abs(transform.position.x - 8.01f) > 0.25f)
+                    {
+                        Debug.Log("Hit");
+                        if (tower != null)
+                        {
+                            tower.TakeDamage(damage * normalRate);
+                        }
+        
+                        GameManager.instance.NormalHit();
+                        Instantiate(hitEffect, transform.position, hitEffect.transform.rotation);
+                    } else if (Mathf.Abs(transform.position.x - 8.01f) > 0.05f)
+                    {
+                        Debug.Log("Good");
+                        if (tower != null)
+                        {
+                            tower.TakeDamage(damage * goodRate);
+                        }
+
+                        GameManager.instance.GoodHit();
+                        Instantiate(goodEffect, transform.position, goodEffect.transform.rotation);
+                    } else
+                    {
+                        Debug.Log("Perferct");
+                        GameManager.instance.PerfectHit();
+                        Instantiate(perfectEffect, transform.position, perfectEffect.transform.rotation);
+                    }
                 }
+                
             }
         }
     }
@@ -67,6 +119,8 @@ public class NoteObject : MonoBehaviour
     {
         if (other.tag == "Activator")
         {
+            tower = other.GetComponent<TowerObject>();
+            Debug.Log("Can hit");
             canBePressed = true;
         }        
     }
@@ -75,13 +129,22 @@ public class NoteObject : MonoBehaviour
     {
         if (gameObject.activeInHierarchy)
         {
-            if (other.tag == "Activator")
+            if (other.tag == "Activator") 
             {
                 canBePressed = false;
 
+                // tower = other.GetComponent<TowerObject>();
+                tower.TakeDamage(damage); 
+                Destroy(gameObject); 
+
+
                 GameManager.instance.NoteMissed();
-                Instantiate(missEffect, transform.position, missEffect.transform.rotation);
+                //Instantiate(missEffect, transform.position, missEffect.transform.rotation);
+
+
             }
         }
     }
 }
+
+

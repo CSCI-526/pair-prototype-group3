@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     public int multiplierTracker;
     public int[] multiplierThreshold;
 
-    public Text scoreText;
+    //public Text scoreText;
     public Text multiText;
 
     public float totalNotes;
@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
 
-        scoreText.text = "Score: 0";
+        // scoreText.text = "hoho: 0";
         currentMultiplier = 1;
 
         totalNotes = FindObjectsOfType<NoteObject>().Length;
@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
         multiText.text = "Multiplier: x" + currentMultiplier;
 
         //currentScore += scorePerNote * currentMultiplier;
-        scoreText.text = "Score: " + currentScore;
+        //scoreText.text = "Score: " + currentScore;
     }
 
     public void NormalHit()
