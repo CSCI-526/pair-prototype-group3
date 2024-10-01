@@ -774,7 +774,7 @@ MonoBehaviour:
   goodHits: 0
   perfectHits: 0
   missedHits: 0
-  resultsScreen: {fileID: 766832845}
+  resultsScreen: {fileID: 0}
   percentHitText: {fileID: 1903861623}
   normalsText: {fileID: 1991264647}
   goodsText: {fileID: 1982387921}
