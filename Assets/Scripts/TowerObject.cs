@@ -21,19 +21,22 @@ public class TowerObject : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        health -= damage;
+        if (health - damage <= 0)
+        {
+            DestroyTower();
+            health = 0;
+        } else
+        {
+            health -= damage;
+        }
 
         Debug.Log($"{gameObject.name} was hitted, remain health : {health}");
         healthbar.text = "Health: " + health;
-        
-        if (health <= 0)
-        {
-            DestroyTower();
-        }
     }
 
     void DestroyTower()
     {
+        GameManager.instance.CheckGameOver();
         Destroy(gameObject);
     }
 }

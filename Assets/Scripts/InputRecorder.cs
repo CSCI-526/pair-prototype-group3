@@ -18,7 +18,7 @@ public class InputRecorder : MonoBehaviour
 
     void Start()
     {
-        fireRate = 0.3f;
+        fireRate = 0.8f;
         upperFireCooldown = 0f;
         lowerFireCooldown = 0f;
     }

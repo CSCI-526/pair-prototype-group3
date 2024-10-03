@@ -1,49 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Runtime.CompilerServices;
 
 public class GameManager : MonoBehaviour
 {
-    
-    public AudioSource theMusic;
-    public bool startPlaying;
-    //public BeatScroller theBS;
     public static GameManager instance;
 
-    public int currentScore;
-    public int scorePerNote = 100;
-    public int scorePerGoodNote = 125;
-    public int scorePerPerfectNote = 150;
+    public AudioSource theMusic;
+    public bool startPlaying;
 
-    public int currentMultiplier;
-    public int multiplierTracker;
-    public int[] multiplierThreshold;
+    public TowerObject[] playerOneTowers;
+    public TowerObject[] playerTwoTowers;
 
-    //public Text scoreText;
-    public Text multiText;
+    public GameObject gameOverScreen;
+    public Text winnerText;
+    public Button restartButton;
 
-    public float totalNotes;
-    public float normalHits;
-    public float goodHits;
-    public float perfectHits;
-    public float missedHits;
-
-    public GameObject resultsScreen;
-    public Text percentHitText, normalsText, goodsText, perfectsText, missesText, rankText, finalScoreText;
-
-    // Start is called before the first frame update
     void Start()
     {
+        Time.timeScale = 1;
         instance = this;
-
-        // scoreText.text = "hoho: 0";
-        currentMultiplier = 1;
-
-        totalNotes = FindObjectsOfType<NoteObject>().Length;
+        gameOverScreen.SetActive(false);
+        restartButton.onClick.AddListener(RestartGame);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!startPlaying)
@@ -51,110 +32,57 @@ public class GameManager : MonoBehaviour
             if (Input.anyKeyDown)
             {
                 startPlaying = true;
-                //theBS.hasStarted = true;
-
                 theMusic.Play();
             }
-        } else
+        }
+        else
         {
-            if (!theMusic.isPlaying && !resultsScreen.activeInHierarchy)
-            {
-                resultsScreen.SetActive(true);
-
-                normalsText.text = "" + normalHits;
-                goodsText.text = goodHits.ToString();
-                perfectsText.text = perfectHits.ToString();
-                missesText.text = "" + missedHits;
-
-                float totalHit = normalHits + goodHits + perfectHits;
-                float percentHit = (totalHit / totalNotes) * 100f;
-
-                percentHitText.text = percentHit.ToString("F1") + "%";
-
-                string rankVal = "F";
-
-                if (percentHit > 40)
-                {
-                    rankVal = "D";
-                    if (percentHit > 55)
-                    {
-                        rankVal = "C";
-                        if (percentHit > 70)
-                        {
-                            rankVal = "B";
-                            if (percentHit > 85)
-                            {
-                                rankVal = "A";
-                                if (percentHit > 99)
-                                {
-                                    rankVal = "S";
-                                }
-                            }
-                        }
-                    }
-                }
-
-                rankText.text = rankVal;
-
-                finalScoreText.text = currentScore.ToString();
-            }
+            CheckGameOver();
         }
     }
 
-    public void NoteHit()
+    public void CheckGameOver()
     {
-        //Debug.Log("Hit on time");
+        bool playerOneDefeated = IsPlayerDefeated(playerOneTowers);
+        bool playerTwoDefeated = IsPlayerDefeated(playerTwoTowers);
 
-        if (currentMultiplier < multiplierThreshold.Length)
+        if (playerOneDefeated || playerTwoDefeated)
         {
-            multiplierTracker++;
+            EndGame(playerTwoDefeated ? "Player One" : "Player Two");
+        }
+    }
 
-            if (multiplierThreshold[currentMultiplier - 1] <= multiplierTracker)
+    bool IsPlayerDefeated(TowerObject[] towers)
+    {
+        bool isDefeated = false;
+        foreach (var tower in towers)
+        {
+            if (tower.health <= 0)
             {
-                multiplierTracker = 0;
-                currentMultiplier++;
+                isDefeated = true;
             }
         }
-
-        multiText.text = "Multiplier: x" + currentMultiplier;
-
-        //currentScore += scorePerNote * currentMultiplier;
-        //scoreText.text = "Score: " + currentScore;
+        return isDefeated;
     }
 
-    public void NormalHit()
+    void EndGame(string winner)
     {
-        currentScore += scorePerNote * currentMultiplier;
-        NoteHit();
-
-        normalHits++;
+        theMusic.Stop();
+        gameOverScreen.SetActive(true);
+        // Debug.Log(winner);
+        winnerText.text = winner + " Wins!";
+        Time.timeScale = 0;
     }
 
-    public void GoodHit()
+    public void RestartGame()
     {
-        currentScore += scorePerGoodNote * currentMultiplier;
-        NoteHit();
-
-        goodHits++;
+        // Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void PerfectHit()
-    {
-        currentScore += scorePerPerfectNote * currentMultiplier;
-        NoteHit();
-
-        perfectHits++;
-    }
-
-    public void NoteMissed()
-    {
-        Debug.Log("Missed note");
-
-        currentMultiplier = 1;
-        multiplierTracker = 0;
-
-        multiText.text = "Multiplier: x" + currentMultiplier;
-
-        missedHits++;
-    }
+    public void NoteHit() { }
+    public void NormalHit() { }
+    public void GoodHit() { }
+    public void PerfectHit() { }
+    public void NoteMissed() { }
 }

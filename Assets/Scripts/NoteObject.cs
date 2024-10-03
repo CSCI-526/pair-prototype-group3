@@ -64,7 +64,7 @@ public class NoteObject : MonoBehaviour
                         }
         
                         GameManager.instance.NormalHit();
-                        Instantiate(hitEffect, transform.position, hitEffect.transform.rotation);
+                        // Instantiate(hitEffect, transform.position, hitEffect.transform.rotation);
                     } else if (Mathf.Abs(transform.position.x + 8.01f) > 0.05f)
                     {
                         Debug.Log("Good");
@@ -74,12 +74,12 @@ public class NoteObject : MonoBehaviour
                         }
 
                         GameManager.instance.GoodHit();
-                        Instantiate(goodEffect, transform.position, goodEffect.transform.rotation);
+                        // Instantiate(goodEffect, transform.position, goodEffect.transform.rotation);
                     } else
                     {
                         Debug.Log("Perferct");
                         GameManager.instance.PerfectHit();
-                        Instantiate(perfectEffect, transform.position, perfectEffect.transform.rotation);
+                        // Instantiate(perfectEffect, transform.position, perfectEffect.transform.rotation);
                     }
                 }else
                 {
@@ -92,7 +92,7 @@ public class NoteObject : MonoBehaviour
                         }
         
                         GameManager.instance.NormalHit();
-                        Instantiate(hitEffect, transform.position, hitEffect.transform.rotation);
+                        // Instantiate(hitEffect, transform.position, hitEffect.transform.rotation);
                     } else if (Mathf.Abs(transform.position.x - 8.01f) > 0.05f)
                     {
                         Debug.Log("Good");
@@ -102,12 +102,12 @@ public class NoteObject : MonoBehaviour
                         }
 
                         GameManager.instance.GoodHit();
-                        Instantiate(goodEffect, transform.position, goodEffect.transform.rotation);
+                        // Instantiate(goodEffect, transform.position, goodEffect.transform.rotation);
                     } else
                     {
                         Debug.Log("Perferct");
                         GameManager.instance.PerfectHit();
-                        Instantiate(perfectEffect, transform.position, perfectEffect.transform.rotation);
+                        // Instantiate(perfectEffect, transform.position, perfectEffect.transform.rotation);
                     }
                 }
                 
@@ -139,7 +139,7 @@ public class NoteObject : MonoBehaviour
 
 
                 GameManager.instance.NoteMissed();
-                //Instantiate(missEffect, transform.position, missEffect.transform.rotation);
+                // Instantiate(missEffect, transform.position, missEffect.transform.rotation);
 
 
             }
